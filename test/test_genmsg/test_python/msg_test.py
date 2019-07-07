@@ -1,4 +1,5 @@
 import sys
+sys.path.append("artifacts")
 from pprint import pprint
 
 from MyMessage import MyMessage

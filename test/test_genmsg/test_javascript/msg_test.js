@@ -3,7 +3,7 @@ encoding = require('./encoding');
 TextEncoder = encoding.TextEncoder;
 TextDecoder = encoding.TextDecoder;
 
-MyMessage = require("./MyMessage");
+MyMessage = require("./artifacts/MyMessage");
 
 m = new MyMessage.MyMessage();
 m.asdf = 5

@@ -2,6 +2,7 @@
 set -e
 set -o pipefail
 
-rm -f MyMessage.js
-genmsg -t javascript ../common/MyMessage.msg
+rm -rf artifacts
+mkdir artifacts
+genmsg -o artifacts/MyMessage.js ../common/MyMessage.msg
 node msg_test.js
