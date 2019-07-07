@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+
+import argparse
+import sys
+
+parser = argparse.ArgumentParser()
+
+
+def add_arguments(parser):
+    parser.add_argument("-o", "--outpath", type=str)
+    parser.add_argument(
+        "-t", "--type", choices=("c", "python", "javascript"),
+    )
+    parser.add_argument("msgpath")
+
+def error(text):
+    "Prints red + bold text to stderr"
+    print("\x1b[1;91m" + text + "\x1b[0m", file=sys.stderr)
+
+def main(outpath, type, msgpath):
+    import msggen
+    import pathlib
+
+    msgpath = pathlib.Path(msgpath)
+    if outpath:
+        outpath = pathlib.Path(outpath)
+    if not type and outpath:
+        ext = outpath.suffix.lower()
+        if ext == ".h":
+            type = "c"
+        elif ext == ".py":
+            type = "python"
+        elif ext == ".js":
+            type = "javascript"
+        else:
+            error("Type was not specified and could not be inferred from outpath")
+            return 1
+    if not outpath:
+        if type == "c":
+            ext = ".h"
+        elif type == "python":
+            ext = ".py"
+        elif type == "javascript":
+            ext = ".js"
+        outpath = pathlib.Path(msgpath.stem + ext)
+
+    msg = msggen.Message.parse(msgpath)
+
+    if type == "python":
+        text = msg.gen_python()
+    elif type == "c":
+        text = msg.gen_c()
+    elif type == "javascript":
+        text = msg.gen_javascript()
+    else:
+        error('Type "{}" is not implemented'.format(type))
+        return 1
+
+    with outpath.open("w") as f:
+        f.write(text)
+
+    return 0
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    add_arguments(parser)
+    args = parser.parse_args()
+    sys.exit(main(**args.__dict__))
