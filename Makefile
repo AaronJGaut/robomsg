@@ -11,13 +11,10 @@ libs:
 
 bins: bin/test-buffer-stream bin/genmsg
 
-test: all
-	@runtests
-
 clean:
 	rm -rf lib/lib*.so bin build
 
-.PHONY: all libs bins clean test
+.PHONY: all libs bins clean
 
 # bins
 
