@@ -1,9 +1,10 @@
 # Message transmission plan
 
 * Add uint8 OPCODE at start of message
-* frame consits of
-    * 4 byte header: uint32 body length
-    * body: 0 or more messages
+* transport frame consists of
+    * 4 byte length (value is sizeof(length, opcode, message))
+    * 2 byte opcode
+    * 1 message contents
 
 
 # Improving message gen

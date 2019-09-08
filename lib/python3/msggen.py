@@ -173,9 +173,10 @@ class {msg_name}
 
 
 class Message(object):
-    def __init__(self, name, msg_dict):
+    def __init__(self, name, msg_dict, opcode=None):
         self.name = name
         self.msg_dict = msg_dict
+        self.opcode = opcode
 
     @staticmethod
     def parse(msg_path):
@@ -184,6 +185,7 @@ class Message(object):
         submessages = {}
         msg_dict = collections.OrderedDict()
         no_comment_ptrn = re.compile(r"^([^#]*).*$")
+        opcode = None
         with msg_path.open() as f:
             lines = f.readlines()
         for i, raw_line in enumerate(lines):
@@ -196,9 +198,20 @@ class Message(object):
             typestring, name = tokens
             if name in msg_dict:
                 raise ValueError(f"Line {i} has a name which already appeared")
-            if typestring == "uint32":
+            if typestring == "opcode":
+                try:
+                    opcode = int(name)
+                    OPCODE_MAX = int(2 ** 16 - 1)
+                    if not 0 <= opcode <= OPCODE_MAX:
+                        raise ValueError(
+                            "opcode not in range [0, {}]".format(OPCODE_MAX)
+                        )
+                except ValueError as e:
+                    msg = "Line {} has invalid opcode (error: {})"
+                    raise ValueError(msg.format(i, e))
+            elif typestring == "uint32":
                 msg_dict[name] = FieldType.UINT32
-            elif typestring == "f32":
+            elif typestring == "float32":
                 msg_dict[name] = FieldType.FLOAT32
             elif typestring == "bool":
                 msg_dict[name] = FieldType.BOOL
@@ -217,7 +230,7 @@ class Message(object):
                     submessages[typestring] = submsg
                 msg_dict[name] = submessages[typestring]
         name = msg_path.stem
-        return Message(name=name, msg_dict=msg_dict)
+        return Message(name=name, msg_dict=msg_dict, opcode=opcode)
 
     def validate(self):
         if not isinstance(self.name, str):

@@ -3,12 +3,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "buffer_stream.h"
+#include "rmsg_buffer_stream.h"
 
 struct Foo
 {
     uint32_t n;
-    float pi;
+    float32_t pi;
     char *qwer;
     bool is_valid;
 } typedef Foo;
@@ -16,12 +16,20 @@ struct Foo
 int main()
 {
     Foo foo1;
-    foo1.n = 5;
-    foo1.pi = 3.14159;
-    foo1.qwer = "qwer";
-    foo1.is_valid = true;
+    uint32_t size = 0;
 
-    uint32_t size = 17;
+    foo1.n = 5;
+    size += 4;
+
+    foo1.pi = 3.14159;
+    size += 4;
+
+    foo1.qwer = "qwer";
+    size += 8;
+
+    foo1.is_valid = true;
+    size += 1;
+
     uint8_t *buffer = malloc(sizeof(uint8_t) * size);
 
     buffer_stream bs;

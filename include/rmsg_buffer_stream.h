@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "rmsg_types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,16 +37,16 @@ buffer_stream_status buffer_stream_read_bytes(buffer_stream *bs, void *val, uint
 buffer_stream_status buffer_stream_read_bool(buffer_stream *bs, bool *val);
 buffer_stream_status buffer_stream_read_uint8(buffer_stream *bs, uint8_t *val);
 buffer_stream_status buffer_stream_read_uint32(buffer_stream *bs, uint32_t *val);
-buffer_stream_status buffer_stream_read_float32(buffer_stream *bs, float *val);
-buffer_stream_status buffer_stream_read_float64(buffer_stream *bs, double *val);
+buffer_stream_status buffer_stream_read_float32(buffer_stream *bs, float32_t *val);
+buffer_stream_status buffer_stream_read_float64(buffer_stream *bs, float64_t *val);
 buffer_stream_status buffer_stream_read_string(buffer_stream *bs, char **val);
 
 buffer_stream_status buffer_stream_write_bytes(buffer_stream *bs, void *val, uint32_t n);
 buffer_stream_status buffer_stream_write_bool(buffer_stream *bs, bool val);
 buffer_stream_status buffer_stream_write_uint8(buffer_stream *bs, uint8_t val);
 buffer_stream_status buffer_stream_write_uint32(buffer_stream *bs, uint32_t val);
-buffer_stream_status buffer_stream_write_float32(buffer_stream *bs, float val);
-buffer_stream_status buffer_stream_write_float64(buffer_stream *bs, double val);
+buffer_stream_status buffer_stream_write_float32(buffer_stream *bs, float32_t val);
+buffer_stream_status buffer_stream_write_float64(buffer_stream *bs, float64_t val);
 buffer_stream_status buffer_stream_write_string(buffer_stream *bs, char *val);
 
 buffer_stream_status buffer_stream_create(buffer_stream **bs_ptr, uint8_t *bytes, size_t length)
@@ -144,12 +145,12 @@ buffer_stream_status buffer_stream_read_uint32(buffer_stream *bs, uint32_t *val)
     return buffer_stream_read_bytes(bs, val, 4);
 }
 
-buffer_stream_status buffer_stream_read_float32(buffer_stream *bs, float *val)
+buffer_stream_status buffer_stream_read_float32(buffer_stream *bs, float32_t *val)
 {
     return buffer_stream_read_bytes(bs, val, 4);
 }
 
-buffer_stream_status buffer_stream_read_float64(buffer_stream *bs, double *val)
+buffer_stream_status buffer_stream_read_float64(buffer_stream *bs, float64_t *val)
 {
     return buffer_stream_read_bytes(bs, val, 8);
 }
@@ -205,12 +206,12 @@ buffer_stream_status buffer_stream_write_uint32(buffer_stream *bs, uint32_t val)
     return buffer_stream_write_bytes(bs, &val, 4);
 }
 
-buffer_stream_status buffer_stream_write_float32(buffer_stream *bs, float val)
+buffer_stream_status buffer_stream_write_float32(buffer_stream *bs, float32_t val)
 {
     return buffer_stream_write_bytes(bs, &val, 4);
 }
 
-buffer_stream_status buffer_stream_write_float64(buffer_stream *bs, double val)
+buffer_stream_status buffer_stream_write_float64(buffer_stream *bs, float64_t val)
 {
     return buffer_stream_write_bytes(bs, &val, 8);
 }

@@ -1,3 +1,3 @@
 uint32 foo
-f32 pi
+float32 pi
 string i

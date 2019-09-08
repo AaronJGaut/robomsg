@@ -1,7 +1,8 @@
 # Config variables
 
 CFLAGS := -fPIC -g -MD -MP
-INCLUDES := -I./include
+INCLUDE_PATH := -I./include
+LIB_PATH := -L./lib
 
 # PHONY rules
 
@@ -19,7 +20,7 @@ clean:
 # bins
 
 bin/test-buffer-stream: build/test_buffer_stream.o | bin
-	gcc -o bin/test-buffer-stream build/test_buffer_stream.o
+	gcc -o $@ $<
 
 bin/genmsg: scripts/genmsg | bin
 	cp $< $@
@@ -30,17 +31,12 @@ bin/genmsg: scripts/genmsg | bin
 # Object files
 
 build/%.o: src/%.c | build
-	gcc ${INCLUDES} ${CFLAGS} -o $@ -c $<
+	gcc ${INCLUDE_PATH} ${CFLAGS} -o $@ -c $<
 
+# Header dependancies
 -include $(wildcard build/*.d)
 
 # Directories
 
-build:
-	mkdir -p build
-
-lib:
-	mkdir -p lib
-
-bin:
-	mkdir -p bin
+build lib bin:
+	mkdir -p $@
